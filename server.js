@@ -6,12 +6,12 @@ import cors from 'cors';
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors()); // Consider restricting origins in production
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Secure MongoDB Connection
-const MONGO_URI = "mongodb+srv://Dharaneesh:dharaneesh86889944356127@dharaneeesh.gtvh6.mongodb.net/?retryWrites=true&w=majority&appName=dharaneeesh";
+const MONGO_URI = process.env.MONGO_URI;
 if (!MONGO_URI) {
     console.error("❌ Missing MONGO_URI in environment variables.");
     process.exit(1);
@@ -121,6 +121,5 @@ app.get('/', (req, res) => {
     res.status(200).send("API is running");
 });
 
-// Start Server
-const PORT = process.env.PORT || process.env.X_ZOHO_CATALYST_LISTEN_PORT || 2000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+// Export the app (Required for Vercel)
+export default app;
